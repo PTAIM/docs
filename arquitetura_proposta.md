@@ -1,6 +1,3 @@
-## Arquitetura Proposta
-
-````mermaid
 graph TB
     subgraph Frontend["Camada de Apresentação"]
         FE[<strong>Frontend React</strong><br/>- Interface Web<br/>- Dashboard<br/>- Formulários]
@@ -23,6 +20,8 @@ graph TB
         LLM[AI Service<br/>FastAPI<br/><br/>Análise de Imagens<br/>???<br/>Cache Redis]
 
         EMAIL[Email Service<br/>FastAPI<br/><br/>SMTP/SendGrid<br/>Templates<br/>Queue<br/>Logs]
+
+        RMQ[RabbitMQ]
     end
 
     subgraph Data["Camada de Dados"]
@@ -40,9 +39,9 @@ graph TB
     FE -->|HTTPS| GW
 
     %% Conexões Gateway -> Serviços
-    ROUTE -->|REST| BE
-    ROUTE -->|REST| LLM
-    ROUTE -->|REST| EMAIL
+    ROUTE -->|REST| BE  
+    BE -->|AMQP| RMQ --> LLM
+    BE -->|AMQP| RMQ --> EMAIL
 
     %% Conexões Serviços -> Dados
     BE -->|SQL| DB
@@ -66,7 +65,6 @@ graph TB
     class FE frontend
     class GW,ROUTE,AGG gateway
     class AUTH,RATE middleware
-    class BE,LLM,EMAIL service
+    class BE,LLM,EMAIL,RMQ service
     class DB,CACHE,S3 database
     class OPENAI,SMTP external```
-````
