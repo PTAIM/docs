@@ -1,3 +1,4 @@
+````mermaid
 graph TB
     subgraph Frontend["Camada de Apresentação"]
         FE[<strong>Frontend React</strong><br/>- Interface Web<br/>- Dashboard<br/>- Formulários]
@@ -68,3 +69,4 @@ graph TB
     class BE,LLM,EMAIL,RMQ service
     class DB,CACHE,S3 database
     class OPENAI,SMTP external```
+````
